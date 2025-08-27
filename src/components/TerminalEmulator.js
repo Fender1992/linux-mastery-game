@@ -1,20 +1,13 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Terminal } from 'xterm';
-import { FitAddon } from 'xterm-addon-fit';
 import 'xterm/css/xterm.css';
-import CommandAutocomplete from './CommandAutocomplete';
 
 const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user' }) => {
   const terminalRef = useRef(null);
   const termRef = useRef(null);
-  const fitAddonRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
   const [commandHistory, setCommandHistory] = useState([]);
   const initTimeoutRef = useRef(null);
-  const [autocompleteVisible, setAutocompleteVisible] = useState(false);
-  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState([]);
-  const [autocompleteIndex, setAutocompleteIndex] = useState(0);
-  const [currentInput, setCurrentInput] = useState('');
 
   const writePrompt = useCallback((term, directory) => {
     if (term) {
@@ -67,12 +60,19 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user' }) => {
     try {
       // Dispose existing terminal if any
       if (termRef.current) {
-        termRef.current.dispose();
+        try {
+          termRef.current.dispose();
+        } catch (e) {
+          console.warn('Error disposing terminal:', e);
+        }
         termRef.current = null;
-        fitAddonRef.current = null;
       }
 
-      // Create new terminal with fixed dimensions
+      // Calculate optimal terminal size based on container
+      const cols = Math.floor(containerRect.width / 9) || 80;
+      const rows = Math.floor(containerRect.height / 17) || 24;
+
+      // Create new terminal with calculated dimensions
       const term = new Terminal({
         cursorBlink: true,
         fontSize: 14,
@@ -83,8 +83,8 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user' }) => {
           cursor: '#00ff00',
           selection: 'rgba(0, 255, 0, 0.3)'
         },
-        cols: 80, // Fixed columns
-        rows: 24,  // Fixed rows
+        cols: cols,
+        rows: rows,
         scrollback: 1000,
         disableStdin: false
       });
@@ -95,27 +95,8 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user' }) => {
       // Store reference
       termRef.current = term;
 
-      // Wait for terminal to be ready before adding FitAddon
-      setTimeout(() => {
-        try {
-          const fitAddon = new FitAddon();
-          term.loadAddon(fitAddon);
-          fitAddonRef.current = fitAddon;
-          
-          // Try to fit after a delay
-          setTimeout(() => {
-            if (fitAddon && terminalRef.current && terminalRef.current.offsetParent !== null) {
-              try {
-                fitAddon.fit();
-              } catch (e) {
-                console.warn('Fit failed, using default size:', e);
-              }
-            }
-          }, 200);
-        } catch (e) {
-          console.warn('FitAddon initialization failed, terminal will use fixed size');
-        }
-      }, 50);
+      // Skip FitAddon entirely to avoid dimension errors
+      // The terminal will use the calculated dimensions
 
       // Initialize terminal content
       term.writeln('\x1b[1;32m🐧 Linux Mastery Game Terminal\x1b[0m');
@@ -213,7 +194,6 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user' }) => {
       if (termRef.current) {
         termRef.current.dispose();
         termRef.current = null;
-        fitAddonRef.current = null;
       }
     };
   }, [initializeTerminal]);
@@ -221,23 +201,25 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user' }) => {
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
-      // Debounce resize and check if terminal is ready
-      if (!fitAddonRef.current || !termRef.current || !isReady) {
+      // Reinitialize terminal on resize with new dimensions
+      if (!termRef.current || !isReady || !terminalRef.current) {
         return;
       }
       
       setTimeout(() => {
         try {
-          // Extra safety check before fitting
-          if (fitAddonRef.current && termRef.current && 
-              termRef.current.element && 
-              termRef.current.element.offsetParent !== null &&
-              terminalRef.current &&
-              terminalRef.current.offsetWidth > 0) {
-            fitAddonRef.current.fit();
+          const containerRect = terminalRef.current.getBoundingClientRect();
+          if (containerRect.width > 0 && containerRect.height > 0) {
+            const cols = Math.floor(containerRect.width / 9) || 80;
+            const rows = Math.floor(containerRect.height / 17) || 24;
+            
+            // Only resize if dimensions actually changed
+            if (termRef.current.cols !== cols || termRef.current.rows !== rows) {
+              termRef.current.resize(cols, rows);
+            }
           }
         } catch (e) {
-          console.warn('Resize fit failed, keeping current size');
+          console.warn('Resize failed, keeping current size');
         }
       }, 150);
     };
