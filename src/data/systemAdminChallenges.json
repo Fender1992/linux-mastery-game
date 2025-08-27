@@ -1,0 +1,123 @@
+[
+  {
+    "id": 401,
+    "title": "System Service Management",
+    "description": "Check the status of the SSH service using systemctl",
+    "hint": "Use 'systemctl status' followed by the service name",
+    "solution": "systemctl status ssh",
+    "validation": "contains",
+    "xpReward": 100,
+    "category": "system-administration",
+    "difficulty": "advanced",
+    "tags": ["systemctl", "services", "ssh"],
+    "successMessage": "Excellent! You've checked the SSH service status."
+  },
+  {
+    "id": 402,
+    "title": "Package Management",
+    "description": "Update the package list on Ubuntu/Debian system",
+    "hint": "Use apt with the update command",
+    "solution": "apt update",
+    "validation": "contains",
+    "xpReward": 90,
+    "category": "package-management",
+    "difficulty": "advanced",
+    "successMessage": "Great! Package list updated successfully."
+  },
+  {
+    "id": 403,
+    "title": "User Account Management",
+    "description": "Create a new user account named 'developer' with a home directory",
+    "hint": "Use useradd with -m flag for home directory",
+    "solution": "useradd -m developer",
+    "validation": "contains",
+    "xpReward": 110,
+    "category": "user-management",
+    "difficulty": "advanced",
+    "successMessage": "User 'developer' created successfully!"
+  },
+  {
+    "id": 404,
+    "title": "File Permissions Advanced",
+    "description": "Give read, write, and execute permissions to the owner only for script.sh",
+    "hint": "Use chmod with numeric notation (700)",
+    "solution": "chmod 700 script.sh",
+    "validation": "contains",
+    "xpReward": 95,
+    "category": "permissions",
+    "difficulty": "advanced",
+    "successMessage": "Perfect! File permissions set to owner-only access."
+  },
+  {
+    "id": 405,
+    "title": "Process Priority Management",
+    "description": "Run a command with lower priority using nice",
+    "hint": "Use nice with a positive value to lower priority",
+    "solution": "nice -n 10",
+    "validation": "contains",
+    "xpReward": 105,
+    "category": "process-management",
+    "difficulty": "advanced",
+    "successMessage": "Process priority adjusted successfully!"
+  },
+  {
+    "id": 406,
+    "title": "System Monitoring with Top",
+    "description": "Launch the top command to monitor system resources",
+    "hint": "Simply type 'top' to launch the system monitor",
+    "solution": "top",
+    "validation": "exact",
+    "xpReward": 85,
+    "category": "monitoring",
+    "difficulty": "advanced",
+    "successMessage": "System monitoring activated! Press 'q' to quit top."
+  },
+  {
+    "id": 407,
+    "title": "Disk Space Analysis",
+    "description": "Check disk usage of current directory and subdirectories in human-readable format",
+    "hint": "Use du with -h flag",
+    "solution": "du -h",
+    "validation": "contains",
+    "xpReward": 90,
+    "category": "filesystem",
+    "difficulty": "advanced",
+    "successMessage": "Disk usage analysis complete!"
+  },
+  {
+    "id": 408,
+    "title": "Network Configuration",
+    "description": "Display all network interfaces and their IP addresses",
+    "hint": "Use ip command with addr or a flags",
+    "solution": "ip addr",
+    "validation": "contains",
+    "xpReward": 100,
+    "category": "networking",
+    "difficulty": "advanced",
+    "successMessage": "Network interfaces displayed successfully!"
+  },
+  {
+    "id": 409,
+    "title": "Log File Analysis",
+    "description": "View the last 20 lines of the system log",
+    "hint": "Use tail with -n flag on /var/log/syslog",
+    "solution": "tail -n 20 /var/log/syslog",
+    "validation": "contains",
+    "xpReward": 95,
+    "category": "logging",
+    "difficulty": "advanced",
+    "successMessage": "Log analysis complete! You're tracking system events."
+  },
+  {
+    "id": 410,
+    "title": "Environment Variables",
+    "description": "Export a new environment variable called MYAPP_CONFIG with value 'production'",
+    "hint": "Use export command with variable=value",
+    "solution": "export MYAPP_CONFIG=production",
+    "validation": "contains",
+    "xpReward": 85,
+    "category": "environment",
+    "difficulty": "advanced",
+    "successMessage": "Environment variable set successfully!"
+  }
+]

@@ -1,0 +1,211 @@
+[
+  {
+    "id": 1001,
+    "title": "The Server is Down!",
+    "story": {
+      "setup": "2 AM. Your phone rings. The main web server is unresponsive and customers are complaining.",
+      "character": "You, the on-call DevOps engineer",
+      "stakes": "Every minute of downtime costs $10,000. Fix it fast!"
+    },
+    "technical": {
+      "objective": "Navigate to /var/log and check the system.log file for errors",
+      "solution": "cd /var/log && cat system.log",
+      "validation": "pattern",
+      "pattern": "cd.*/var/log.*cat.*system\\.log",
+      "hiddenBonus": "Use grep to filter for ERROR messages"
+    },
+    "xpReward": 150,
+    "timeLimit": 120,
+    "difficulty": "intermediate",
+    "successMessage": "Crisis averted! You found the issue - a runaway process. The server is back online!",
+    "failureMessage": "The server stayed down too long. The company lost significant revenue."
+  },
+  {
+    "id": 1002,
+    "title": "The Hacker's Trail",
+    "story": {
+      "setup": "Security team detected suspicious activity. Someone tried to access restricted files.",
+      "character": "You, the Security Analyst",
+      "stakes": "Find evidence before the hacker covers their tracks!"
+    },
+    "technical": {
+      "objective": "Search for any files modified in the last 24 hours",
+      "solution": "find . -type f -mtime -1",
+      "validation": "pattern",
+      "pattern": "find.*-mtime.*-1",
+      "hiddenBonus": "Check for hidden files with ls -la"
+    },
+    "xpReward": 200,
+    "timeLimit": 180,
+    "difficulty": "advanced",
+    "successMessage": "Excellent work! You found the compromised files and secured the system.",
+    "failureMessage": "The trail went cold. The hacker erased their tracks."
+  },
+  {
+    "id": 1003,
+    "title": "The Archive Quest",
+    "story": {
+      "setup": "An ancient backup contains critical data, but it's buried in nested directories.",
+      "character": "You, the Data Archaeologist",
+      "stakes": "The legal team needs this file for tomorrow's court case!"
+    },
+    "technical": {
+      "objective": "Find all .txt files containing the word 'contract'",
+      "solution": "grep -r contract *.txt",
+      "validation": "pattern",
+      "pattern": "grep.*contract.*\\.txt",
+      "hiddenBonus": "Use grep -l to list only filenames"
+    },
+    "xpReward": 125,
+    "timeLimit": 150,
+    "difficulty": "intermediate",
+    "successMessage": "Success! You found the contract. The legal team is saved!",
+    "failureMessage": "Time ran out. The case proceeds without the crucial evidence."
+  },
+  {
+    "id": 1004,
+    "title": "The Space Crisis",
+    "story": {
+      "setup": "Alert! The server is running out of disk space. Services are starting to fail.",
+      "character": "You, the System Administrator",
+      "stakes": "Clear space before the database crashes!"
+    },
+    "technical": {
+      "objective": "Find and remove all .log files older than 30 days",
+      "solution": "find . -name '*.log' -mtime +30 -delete",
+      "validation": "pattern",
+      "pattern": "find.*\\.log.*-mtime.*\\+30.*-delete",
+      "hiddenBonus": "Create a backup before deletion"
+    },
+    "xpReward": 175,
+    "timeLimit": 90,
+    "difficulty": "advanced",
+    "successMessage": "Disk space recovered! All services are running smoothly again.",
+    "failureMessage": "The database crashed. Data recovery will take hours."
+  },
+  {
+    "id": 1005,
+    "title": "The Configuration Mystery",
+    "story": {
+      "setup": "The app won't start. Someone changed a configuration file but didn't document it.",
+      "character": "You, the Lead Developer",
+      "stakes": "The release is in 1 hour. Find and fix the configuration!"
+    },
+    "technical": {
+      "objective": "Compare two config files to find differences",
+      "solution": "diff config.old config.new",
+      "validation": "pattern",
+      "pattern": "diff.*config",
+      "hiddenBonus": "Use git to check recent changes"
+    },
+    "xpReward": 100,
+    "timeLimit": 120,
+    "difficulty": "intermediate",
+    "successMessage": "Configuration fixed! The release proceeds on schedule.",
+    "failureMessage": "Release delayed. The team works overtime to fix the issue."
+  },
+  {
+    "id": 1006,
+    "title": "The Zombie Process Hunt",
+    "story": {
+      "setup": "System performance is degrading. Multiple zombie processes are consuming resources.",
+      "character": "You, the Performance Engineer",
+      "stakes": "Users are complaining about slow response times!"
+    },
+    "technical": {
+      "objective": "List all running processes and identify the zombies",
+      "solution": "ps aux | grep defunct",
+      "validation": "pattern",
+      "pattern": "ps.*aux.*grep.*defunct",
+      "hiddenBonus": "Use top or htop for real-time monitoring"
+    },
+    "xpReward": 150,
+    "timeLimit": 100,
+    "difficulty": "advanced",
+    "successMessage": "Zombies eliminated! System performance restored to normal.",
+    "failureMessage": "System crashed under load. Emergency maintenance required."
+  },
+  {
+    "id": 1007,
+    "title": "The Permission Puzzle",
+    "story": {
+      "setup": "New team member can't access project files. Permission settings are misconfigured.",
+      "character": "You, the Team Lead",
+      "stakes": "They need access NOW for the client presentation!"
+    },
+    "technical": {
+      "objective": "Make the project directory readable and writable for the team",
+      "solution": "chmod 775 project/",
+      "validation": "pattern",
+      "pattern": "chmod.*77[0-9].*project",
+      "hiddenBonus": "Use chown to set proper ownership"
+    },
+    "xpReward": 100,
+    "timeLimit": 60,
+    "difficulty": "intermediate",
+    "successMessage": "Access granted! The presentation goes perfectly.",
+    "failureMessage": "Presentation failed. The client is not impressed."
+  },
+  {
+    "id": 1008,
+    "title": "The Backup Mission",
+    "story": {
+      "setup": "Major update coming. You need to backup critical data before deployment.",
+      "character": "You, the Backup Specialist",
+      "stakes": "If something goes wrong without a backup, data will be lost forever!"
+    },
+    "technical": {
+      "objective": "Create a compressed archive of the entire project directory",
+      "solution": "tar -czf backup.tar.gz project/",
+      "validation": "pattern",
+      "pattern": "tar.*-[czf].*backup.*project",
+      "hiddenBonus": "Include timestamp in backup filename"
+    },
+    "xpReward": 125,
+    "timeLimit": 120,
+    "difficulty": "intermediate",
+    "successMessage": "Backup complete! Deployment proceeds safely.",
+    "failureMessage": "No backup created. A bug in deployment causes data loss."
+  },
+  {
+    "id": 1009,
+    "title": "The Network Detective",
+    "story": {
+      "setup": "API calls are failing. Is it our server or the network?",
+      "character": "You, the Network Engineer",
+      "stakes": "The mobile app is down for millions of users!"
+    },
+    "technical": {
+      "objective": "Test connectivity to the API server",
+      "solution": "ping api.server.com",
+      "validation": "pattern",
+      "pattern": "ping.*api",
+      "hiddenBonus": "Use traceroute to find where packets are dropping"
+    },
+    "xpReward": 100,
+    "timeLimit": 90,
+    "difficulty": "beginner",
+    "successMessage": "Network issue identified and reported. Fix deployed quickly.",
+    "failureMessage": "Unable to diagnose. Users remain frustrated for hours."
+  },
+  {
+    "id": 1010,
+    "title": "The Midnight Migration",
+    "story": {
+      "setup": "Database migration script must run tonight during maintenance window.",
+      "character": "You, the Database Admin",
+      "stakes": "If migration fails, Monday morning will be chaos!"
+    },
+    "technical": {
+      "objective": "Schedule a script to run at 2 AM using cron",
+      "solution": "crontab -e",
+      "validation": "exact",
+      "hiddenBonus": "Add logging to capture migration output"
+    },
+    "xpReward": 200,
+    "timeLimit": 180,
+    "difficulty": "advanced",
+    "successMessage": "Migration scheduled successfully. Monday starts smoothly!",
+    "failureMessage": "Migration didn't run. Emergency fix needed Monday morning."
+  }
+]

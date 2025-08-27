@@ -1,0 +1,138 @@
+[
+  {
+    "id": 1,
+    "title": "Your First Command",
+    "description": "Welcome to Linux! Let's start with the basics. Type the 'pwd' command to see your current directory.",
+    "hint": "pwd stands for 'print working directory'. Just type pwd and press Enter.",
+    "solution": "pwd",
+    "validation": "exact",
+    "successMessage": "Great! You've displayed your current directory. You're in /home/user."
+  },
+  {
+    "id": 2,
+    "title": "Listing Files",
+    "description": "Now let's see what files are in your current directory. Use the 'ls' command to list them.",
+    "hint": "Type 'ls' to see the files and folders in your current location.",
+    "solution": "ls",
+    "validation": "exact",
+    "successMessage": "Excellent! You can see the documents and projects folders."
+  },
+  {
+    "id": 3,
+    "title": "Show Hidden Files",
+    "description": "Some files are hidden (they start with a dot). Use 'ls -a' to see all files including hidden ones.",
+    "hint": "The -a flag means 'all'. Try: ls -a",
+    "solution": "ls -a",
+    "validation": "exact",
+    "successMessage": "Perfect! Now you can see the hidden .bashrc file too."
+  },
+  {
+    "id": 4,
+    "title": "Navigate to Documents",
+    "description": "Let's move into the documents folder. Use the 'cd' command followed by 'documents'.",
+    "hint": "cd stands for 'change directory'. Type: cd documents",
+    "solution": "cd documents",
+    "validation": "exact",
+    "successMessage": "Well done! You've navigated into the documents folder."
+  },
+  {
+    "id": 5,
+    "title": "Read a File",
+    "description": "There's a file called 'readme.txt' here. Use the 'cat' command to read its contents.",
+    "hint": "cat displays file contents. Type: cat readme.txt",
+    "solution": "cat readme.txt",
+    "validation": "exact",
+    "successMessage": "Great job! You've read your first file in Linux."
+  },
+  {
+    "id": 6,
+    "title": "Go Back",
+    "description": "Navigate back to the parent directory using 'cd ..'",
+    "hint": "The '..' means parent directory. Type: cd ..",
+    "solution": "cd ..",
+    "validation": "exact",
+    "successMessage": "Perfect! You're back in /home/user."
+  },
+  {
+    "id": 7,
+    "title": "Create a Directory",
+    "description": "Create a new directory called 'practice' using the mkdir command.",
+    "hint": "mkdir stands for 'make directory'. Type: mkdir practice",
+    "solution": "mkdir practice",
+    "validation": "exact",
+    "successMessage": "Excellent! You've created your first directory."
+  },
+  {
+    "id": 8,
+    "title": "Create a File",
+    "description": "Create an empty file called 'test.txt' using the touch command.",
+    "hint": "The touch command creates empty files. Type: touch test.txt",
+    "solution": "touch test.txt",
+    "validation": "exact",
+    "successMessage": "Great! You've created a new file."
+  },
+  {
+    "id": 9,
+    "title": "Display Text",
+    "description": "Use the echo command to display 'Hello Linux' on the screen.",
+    "hint": "Echo repeats what you type. Try: echo Hello Linux",
+    "solution": "echo Hello Linux",
+    "validation": "contains",
+    "expectedOutput": "Hello Linux",
+    "successMessage": "Perfect! Echo is useful for displaying text and creating file contents."
+  },
+  {
+    "id": 10,
+    "title": "Who Are You?",
+    "description": "Find out your username using the 'whoami' command.",
+    "hint": "Just type 'whoami' to see your username.",
+    "solution": "whoami",
+    "validation": "exact",
+    "successMessage": "Good! You're logged in as 'user'."
+  },
+  {
+    "id": 11,
+    "title": "Show the Date",
+    "description": "Display the current date and time using the 'date' command.",
+    "hint": "Simply type 'date' to see the current date and time.",
+    "solution": "date",
+    "validation": "exact",
+    "successMessage": "Well done! The date command is useful for timestamps."
+  },
+  {
+    "id": 12,
+    "title": "Environment Variables",
+    "description": "Display your HOME environment variable using 'echo $HOME'.",
+    "hint": "Environment variables start with $. Type: echo $HOME",
+    "solution": "echo $HOME",
+    "validation": "exact",
+    "successMessage": "Excellent! Environment variables store system configuration."
+  },
+  {
+    "id": 13,
+    "title": "Clear the Screen",
+    "description": "The terminal is getting crowded. Use the 'clear' command to clean it up.",
+    "hint": "Just type 'clear' to clear the terminal screen.",
+    "solution": "clear",
+    "validation": "exact",
+    "successMessage": "Nice and clean! The clear command helps keep your workspace tidy."
+  },
+  {
+    "id": 14,
+    "title": "Copy a File",
+    "description": "Copy test.txt to test_backup.txt using the cp command.",
+    "hint": "cp stands for copy. Format: cp source destination",
+    "solution": "cp test.txt test_backup.txt",
+    "validation": "exact",
+    "successMessage": "Great! You've created a backup of your file."
+  },
+  {
+    "id": 15,
+    "title": "List with Details",
+    "description": "Use 'ls -l' to see detailed information about files.",
+    "hint": "The -l flag shows long format with permissions, size, and dates.",
+    "solution": "ls -l",
+    "validation": "exact",
+    "successMessage": "Excellent! You can now see file permissions, sizes, and modification dates."
+  }
+]

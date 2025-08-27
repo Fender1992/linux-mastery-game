@@ -1,0 +1,146 @@
+[
+  {
+    "id": 101,
+    "title": "Find Files by Name",
+    "description": "Use the find command to locate all .txt files in the current directory and subdirectories.",
+    "hint": "Use: find . -name '*.txt'",
+    "solution": "find . -name *.txt",
+    "validation": "pattern",
+    "pattern": "find.*-name.*\\.txt",
+    "successMessage": "Excellent! The find command is powerful for locating files."
+  },
+  {
+    "id": 102,
+    "title": "Search in Files",
+    "description": "Use grep to find the word 'Linux' in readme.txt in the documents folder.",
+    "hint": "Navigate to documents first, then: grep Linux readme.txt",
+    "solution": "grep Linux readme.txt",
+    "validation": "contains",
+    "expectedOutput": "Linux",
+    "successMessage": "Great! Grep is essential for searching text patterns."
+  },
+  {
+    "id": 103,
+    "title": "Rename a File",
+    "description": "Rename test.txt to myfile.txt using the mv command.",
+    "hint": "mv can move or rename. Use: mv test.txt myfile.txt",
+    "solution": "mv test.txt myfile.txt",
+    "validation": "exact",
+    "successMessage": "Perfect! The mv command handles both moving and renaming."
+  },
+  {
+    "id": 104,
+    "title": "Remove a Directory",
+    "description": "Remove the practice directory and all its contents using rm with appropriate flags.",
+    "hint": "Use rm -r for recursive removal. Add -f to force.",
+    "solution": "rm -r practice",
+    "validation": "pattern",
+    "pattern": "rm.*-r.*practice",
+    "successMessage": "Well done! Be careful with rm -r, it's powerful but dangerous."
+  },
+  {
+    "id": 105,
+    "title": "Create Nested Directories",
+    "description": "Create a directory structure: projects/web/css in one command.",
+    "hint": "Use mkdir -p to create parent directories as needed.",
+    "solution": "mkdir -p projects/web/css",
+    "validation": "exact",
+    "successMessage": "Excellent! The -p flag creates parent directories automatically."
+  },
+  {
+    "id": 106,
+    "title": "Count Lines in a File",
+    "description": "Navigate to documents and count the lines in notes.txt using grep and wc.",
+    "hint": "You can use: cat notes.txt | wc -l or just wc -l notes.txt",
+    "solution": "cat notes.txt",
+    "validation": "contains",
+    "expectedOutput": "Remember",
+    "successMessage": "Good! Combining commands with pipes is a powerful Linux feature."
+  },
+  {
+    "id": 107,
+    "title": "Set an Environment Variable",
+    "description": "Create a new environment variable called MYVAR with the value 'Hello'.",
+    "hint": "Use: export MYVAR=Hello",
+    "solution": "export MYVAR=Hello",
+    "validation": "exact",
+    "successMessage": "Great! Environment variables are crucial for system configuration."
+  },
+  {
+    "id": 108,
+    "title": "View All Environment Variables",
+    "description": "Display all environment variables using the env command.",
+    "hint": "Just type 'env' to see all variables.",
+    "solution": "env",
+    "validation": "exact",
+    "successMessage": "Perfect! You can see all the system's environment variables."
+  },
+  {
+    "id": 109,
+    "title": "Navigate to Root",
+    "description": "Navigate to the root directory of the filesystem.",
+    "hint": "The root is represented by a single forward slash: cd /",
+    "solution": "cd /",
+    "validation": "exact",
+    "successMessage": "You're at the root! This is the top of the Linux filesystem hierarchy."
+  },
+  {
+    "id": 110,
+    "title": "Explore System Directories",
+    "description": "List the contents of the /etc directory.",
+    "hint": "Use: ls /etc or cd /etc then ls",
+    "solution": "ls /etc",
+    "validation": "pattern",
+    "pattern": "ls.*/etc",
+    "successMessage": "Good! The /etc directory contains system configuration files."
+  },
+  {
+    "id": 111,
+    "title": "Return Home",
+    "description": "Return to your home directory using the shortcut.",
+    "hint": "Use: cd ~ or just cd without arguments",
+    "solution": "cd",
+    "validation": "pattern",
+    "pattern": "cd($|\\s+~)",
+    "successMessage": "Welcome home! The ~ symbol always represents your home directory."
+  },
+  {
+    "id": 112,
+    "title": "Check Manual Pages",
+    "description": "View the manual page for the ls command.",
+    "hint": "Use: man ls",
+    "solution": "man ls",
+    "validation": "exact",
+    "successMessage": "Excellent! Manual pages are your best friend for learning commands."
+  },
+  {
+    "id": 113,
+    "title": "Create Multiple Files",
+    "description": "Create three files (file1.txt, file2.txt, file3.txt) in a single command.",
+    "hint": "You can list multiple filenames: touch file1.txt file2.txt file3.txt",
+    "solution": "touch file1.txt file2.txt file3.txt",
+    "validation": "contains",
+    "expectedOutput": "file1.txt",
+    "successMessage": "Great! You can operate on multiple files at once."
+  },
+  {
+    "id": 114,
+    "title": "Hidden Files in Home",
+    "description": "List all files in your home directory, including hidden ones, in long format.",
+    "hint": "Combine flags: ls -la or ls -al",
+    "solution": "ls -la",
+    "validation": "pattern",
+    "pattern": "ls.*-[la]{2}",
+    "successMessage": "Perfect! You can see all files with full details."
+  },
+  {
+    "id": 115,
+    "title": "Search and Count",
+    "description": "Find how many times the word 'Linux' appears in all .txt files in documents.",
+    "hint": "Navigate to documents, then: grep -c Linux *.txt",
+    "solution": "grep Linux documents/readme.txt",
+    "validation": "contains",
+    "expectedOutput": "Linux",
+    "successMessage": "Excellent! Combining grep with other options gives powerful search capabilities."
+  }
+]
