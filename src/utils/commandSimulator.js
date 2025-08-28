@@ -199,9 +199,29 @@ class CommandSimulator {
         return this.env();
       case 'export':
         return this.export(args);
+      case 'head':
+        return this.head(args);
+      case 'tail':
+        return this.tail(args);
+      case 'wc':
+        return this.wc(args);
+      case 'chmod':
+        return this.chmod(args);
+      case 'ps':
+        return this.ps(args);
+      case 'sort':
+        return this.sort(args);
+      case 'uniq':
+        return this.uniq(args);
+      case 'df':
+        return this.df();
+      case 'du':
+        return this.du(args);
+      case 'which':
+        return this.which(args);
       default:
         return { 
-          output: `bash: ${command}: command not found`,
+          output: `bash: ${command}: command not found\nTry 'help' to see available commands`,
           newDirectory: this.currentDirectory 
         };
     }
@@ -566,26 +586,35 @@ BASIC COMMANDS:
   cat <file>   - Display file contents
 
 FILE OPERATIONS:
+  head [-n X] <file>  - Display first X lines (default 10)
+  tail [-n X] <file>  - Display last X lines (default 10)
+  wc [-lwc] <file>    - Count lines, words, characters
+  sort [-rn] <file>   - Sort file contents
+  uniq <file>         - Remove duplicate lines
   chmod <mode> <file> - Change file permissions
   grep <pattern> <file> - Search text in files
   find <path> -name <pattern> - Find files
   
 SYSTEM INFO:
+  ps [aux]     - Display running processes
+  df           - Display disk usage  
+  du [-h]      - Display directory sizes
+  which <cmd>  - Show command location
   whoami       - Display current user
   date         - Show current date/time
   echo <text>  - Display text
   clear        - Clear terminal screen
   env          - Show environment variables
+  export <var>=<value> - Set environment variable
   history      - Show command history
 
-ADVANCED (Practice in higher levels):
-  ps           - Process status
-  kill         - Terminate process
-  top          - System monitor
-  df           - Disk usage
+ADVANCED (Coming Soon):
+  pipe |       - Chain commands together
+  && and ||    - Conditional execution
+  top          - Real-time system monitor
   tar          - Archive files
   ssh          - Secure shell
-  awk          - Text processing
+  awk          - Advanced text processing
   sed          - Stream editor
   
 Type 'man <command>' for detailed help on any command.
@@ -710,6 +739,242 @@ Use arrow keys to navigate command history.`;
     return this.currentDirectory === '/' 
       ? '/' + path 
       : this.currentDirectory + '/' + path;
+  }
+
+  // New command implementations
+  head(args) {
+    if (args.length === 0) {
+      return { output: 'head: missing file operand', newDirectory: this.currentDirectory };
+    }
+    
+    const lines = parseInt(args.find(arg => arg.startsWith('-n'))?.slice(2)) || 10;
+    const filename = args.find(arg => !arg.startsWith('-'));
+    
+    if (!filename) {
+      return { output: 'head: missing file operand', newDirectory: this.currentDirectory };
+    }
+    
+    const file = this.resolvePath(filename);
+    if (!file) {
+      return { output: `head: ${filename}: No such file or directory`, newDirectory: this.currentDirectory };
+    }
+    if (file.type !== 'file') {
+      return { output: `head: ${filename}: Is a directory`, newDirectory: this.currentDirectory };
+    }
+    
+    const content = file.content || '';
+    const contentLines = content.split('\n');
+    const output = contentLines.slice(0, lines).join('\n');
+    
+    return { output, newDirectory: this.currentDirectory };
+  }
+
+  tail(args) {
+    if (args.length === 0) {
+      return { output: 'tail: missing file operand', newDirectory: this.currentDirectory };
+    }
+    
+    const lines = parseInt(args.find(arg => arg.startsWith('-n'))?.slice(2)) || 10;
+    const filename = args.find(arg => !arg.startsWith('-'));
+    
+    if (!filename) {
+      return { output: 'tail: missing file operand', newDirectory: this.currentDirectory };
+    }
+    
+    const file = this.resolvePath(filename);
+    if (!file) {
+      return { output: `tail: ${filename}: No such file or directory`, newDirectory: this.currentDirectory };
+    }
+    if (file.type !== 'file') {
+      return { output: `tail: ${filename}: Is a directory`, newDirectory: this.currentDirectory };
+    }
+    
+    const content = file.content || '';
+    const contentLines = content.split('\n');
+    const output = contentLines.slice(-lines).join('\n');
+    
+    return { output, newDirectory: this.currentDirectory };
+  }
+
+  wc(args) {
+    if (args.length === 0) {
+      return { output: 'wc: missing file operand', newDirectory: this.currentDirectory };
+    }
+    
+    const filename = args.find(arg => !arg.startsWith('-'));
+    if (!filename) {
+      return { output: 'wc: missing file operand', newDirectory: this.currentDirectory };
+    }
+    
+    const file = this.resolvePath(filename);
+    if (!file) {
+      return { output: `wc: ${filename}: No such file or directory`, newDirectory: this.currentDirectory };
+    }
+    if (file.type !== 'file') {
+      return { output: `wc: ${filename}: Is a directory`, newDirectory: this.currentDirectory };
+    }
+    
+    const content = file.content || '';
+    const lines = content.split('\n').length;
+    const words = content.split(/\s+/).filter(w => w).length;
+    const bytes = content.length;
+    
+    const showLines = args.includes('-l') || (!args.some(a => a.startsWith('-')));
+    const showWords = args.includes('-w') || (!args.some(a => a.startsWith('-')));
+    const showBytes = args.includes('-c') || (!args.some(a => a.startsWith('-')));
+    
+    let output = '';
+    if (showLines) output += lines + ' ';
+    if (showWords) output += words + ' ';
+    if (showBytes) output += bytes + ' ';
+    output += filename;
+    
+    return { output: output.trim(), newDirectory: this.currentDirectory };
+  }
+
+  chmod(args) {
+    if (args.length < 2) {
+      return { output: 'chmod: missing operand', newDirectory: this.currentDirectory };
+    }
+    
+    const mode = args[0];
+    const filename = args[1];
+    
+    const file = this.resolvePath(filename);
+    if (!file) {
+      return { output: `chmod: cannot access '${filename}': No such file or directory`, newDirectory: this.currentDirectory };
+    }
+    
+    // Simulate chmod (just store the mode as metadata)
+    file.permissions = mode;
+    
+    return { output: '', newDirectory: this.currentDirectory };
+  }
+
+  ps(args) {
+    const aux = args.includes('aux') || args.includes('-aux');
+    
+    if (aux) {
+      return {
+        output: `USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.1  19352  1536 ?        Ss   10:00   0:01 /sbin/init
+user      1234  0.1  0.5  45632  5120 pts/0    S+   10:15   0:00 bash
+user      1235  0.0  0.3  38456  3072 pts/0    R+   10:30   0:00 ps aux`,
+        newDirectory: this.currentDirectory
+      };
+    }
+    
+    return {
+      output: `  PID TTY          TIME CMD
+ 1234 pts/0    00:00:00 bash
+ 1235 pts/0    00:00:00 ps`,
+      newDirectory: this.currentDirectory
+    };
+  }
+
+  sort(args) {
+    if (args.length === 0) {
+      return { output: 'sort: missing file operand', newDirectory: this.currentDirectory };
+    }
+    
+    const filename = args.find(arg => !arg.startsWith('-'));
+    if (!filename) {
+      return { output: 'sort: missing file operand', newDirectory: this.currentDirectory };
+    }
+    
+    const file = this.resolvePath(filename);
+    if (!file) {
+      return { output: `sort: ${filename}: No such file or directory`, newDirectory: this.currentDirectory };
+    }
+    if (file.type !== 'file') {
+      return { output: `sort: ${filename}: Is a directory`, newDirectory: this.currentDirectory };
+    }
+    
+    const content = file.content || '';
+    const lines = content.split('\n');
+    const reverse = args.includes('-r');
+    const numeric = args.includes('-n');
+    
+    lines.sort((a, b) => {
+      if (numeric) {
+        return reverse ? parseFloat(b) - parseFloat(a) : parseFloat(a) - parseFloat(b);
+      }
+      return reverse ? b.localeCompare(a) : a.localeCompare(b);
+    });
+    
+    return { output: lines.join('\n'), newDirectory: this.currentDirectory };
+  }
+
+  uniq(args) {
+    if (args.length === 0) {
+      return { output: 'uniq: missing file operand', newDirectory: this.currentDirectory };
+    }
+    
+    const filename = args.find(arg => !arg.startsWith('-'));
+    if (!filename) {
+      return { output: 'uniq: missing file operand', newDirectory: this.currentDirectory };
+    }
+    
+    const file = this.resolvePath(filename);
+    if (!file) {
+      return { output: `uniq: ${filename}: No such file or directory`, newDirectory: this.currentDirectory };
+    }
+    if (file.type !== 'file') {
+      return { output: `uniq: ${filename}: Is a directory`, newDirectory: this.currentDirectory };
+    }
+    
+    const content = file.content || '';
+    const lines = content.split('\n');
+    const unique = [];
+    let prev = null;
+    
+    for (const line of lines) {
+      if (line !== prev) {
+        unique.push(line);
+        prev = line;
+      }
+    }
+    
+    return { output: unique.join('\n'), newDirectory: this.currentDirectory };
+  }
+
+  df() {
+    return {
+      output: `Filesystem     1K-blocks    Used Available Use% Mounted on
+/dev/sda1       20480000  8192000  11264000  43% /
+tmpfs            2048000        0   2048000   0% /dev/shm
+/dev/sda2       40960000 16384000  22528000  43% /home`,
+      newDirectory: this.currentDirectory
+    };
+  }
+
+  du(args) {
+    const humanReadable = args.includes('-h');
+    const path = args.find(arg => !arg.startsWith('-')) || '.';
+    
+    const dir = this.resolvePath(path);
+    if (!dir) {
+      return { output: `du: cannot access '${path}': No such file or directory`, newDirectory: this.currentDirectory };
+    }
+    
+    // Simulate disk usage
+    const size = humanReadable ? '4.0K' : '4';
+    return { output: `${size}\t${path}`, newDirectory: this.currentDirectory };
+  }
+
+  which(args) {
+    if (args.length === 0) {
+      return { output: 'which: missing argument', newDirectory: this.currentDirectory };
+    }
+    
+    const command = args[0];
+    const knownCommands = ['ls', 'cd', 'pwd', 'cat', 'echo', 'grep', 'find', 'mkdir', 'touch', 'rm', 'cp', 'mv', 'head', 'tail', 'wc', 'chmod', 'ps', 'sort', 'uniq', 'df', 'du', 'which'];
+    
+    if (knownCommands.includes(command)) {
+      return { output: `/usr/bin/${command}`, newDirectory: this.currentDirectory };
+    }
+    
+    return { output: '', newDirectory: this.currentDirectory };
   }
 }
 
