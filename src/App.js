@@ -332,82 +332,54 @@ function App() {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}>
       <header className="app-header">
-        <div className="header-content">
-          <h1>🐧 Linux Mastery Game</h1>
-          <button 
-            className="menu-toggle"
-            onClick={() => setShowMenu(!showMenu)}
-          >
-            ☰
-          </button>
-        </div>
+        <button 
+          className="menu-toggle"
+          onClick={() => setShowMenu(!showMenu)}
+          title="Toggle Menu"
+        >
+          ☰
+        </button>
         
-        <div className="header-stats">
-          <button 
-            className="sandbox-btn"
-            onClick={() => setShowSandbox(true)}
-            title="Practice Mode"
-          >
-            🧪 Sandbox
-          </button>
-          
-          <button 
-            className="stat-btn"
-            onClick={() => setShowProfile(true)}
-          >
-            <span className="stat-icon">{gamification.playerData.rank === 'MASTER' ? '👑' : '⭐'}</span>
-            <span>Level {playerData.level}</span>
-          </button>
-          
-          <div className="xp-display">
-            <span className="xp-icon">⚡</span>
-            <span>{playerData.xp} XP</span>
-          </div>
-          
-          <div className="streak-display">
-            <span className="streak-icon">🔥</span>
-            <span>{playerData.streak} days</span>
-          </div>
-          
-          <button 
-            className="leaderboard-btn"
-            onClick={() => setShowLeaderboard(true)}
-          >
-            🏆
-          </button>
-        </div>
+        <h1>Linux:~$</h1>
         
-        <div className="difficulty-selector">
+        <div className="nav-center">
           <button 
-            className={`difficulty-btn ${difficulty === 'beginner' ? 'active' : ''}`}
+            className={`nav-btn ${difficulty === 'beginner' ? 'active' : ''}`}
             onClick={() => handleDifficultyChange('beginner')}
           >
             Beginner
           </button>
           <button 
-            className={`difficulty-btn ${difficulty === 'intermediate' ? 'active' : ''}`}
+            className={`nav-btn ${difficulty === 'intermediate' ? 'active' : ''}`}
             onClick={() => handleDifficultyChange('intermediate')}
           >
             Intermediate
           </button>
           <button 
-            className={`difficulty-btn ${difficulty === 'advanced' ? 'active' : ''}`}
+            className={`nav-btn ${difficulty === 'advanced' ? 'active' : ''}`}
             onClick={() => handleDifficultyChange('advanced')}
           >
             Advanced
           </button>
           <button 
-            className={`difficulty-btn ${difficulty === 'expert' ? 'active' : ''}`}
+            className={`nav-btn ${difficulty === 'expert' ? 'active' : ''}`}
             onClick={() => handleDifficultyChange('expert')}
           >
             Expert
           </button>
           <button 
-            className={`difficulty-btn ${difficulty === 'story' ? 'active' : ''}`}
+            className={`nav-btn ${difficulty === 'story' ? 'active' : ''}`}
             onClick={() => handleDifficultyChange('story')}
           >
-            Story Mode 🎭
+            Story
           </button>
+        </div>
+        
+        <div className="nav-right">
+          <span className="status-text">Lv.{playerData.level} | {playerData.xp}XP</span>
+          <button className="nav-icon" onClick={() => setShowSandbox(true)} title="Sandbox">🧪</button>
+          <button className="nav-icon" onClick={() => setShowProfile(true)} title="Profile">👤</button>
+          <button className="nav-icon" onClick={() => setShowLeaderboard(true)} title="Leaderboard">🏆</button>
         </div>
       </header>
 
@@ -479,6 +451,14 @@ function App() {
                 <div className="story-setup">{currentChallenge.story.setup}</div>
                 <div className="story-character">Playing as: {currentChallenge.story.character}</div>
                 <div className="story-stakes">⚠️ {currentChallenge.story.stakes}</div>
+                {currentChallenge.technical && (
+                  <div className="story-objective">
+                    <strong>📋 Objective:</strong> {currentChallenge.technical.objective}
+                    <div className="command-example">
+                      💡 Expected format: <code>{currentChallenge.technical.solution}</code>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

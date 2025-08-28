@@ -18,6 +18,14 @@ const initialFileSystem = {
                   'notes.txt': {
                     type: 'file',
                     content: 'Remember:\n- pwd shows current directory\n- ls lists files\n- cd changes directory'
+                  },
+                  'tutorial.md': {
+                    type: 'file',
+                    content: '# Linux Tutorial\n\n## Basic Commands\n- `ls` - list files\n- `cd` - change directory\n- `pwd` - print working directory\n- `cat` - display file contents'
+                  },
+                  'commands.txt': {
+                    type: 'file',
+                    content: 'Essential Linux Commands:\nls -la    # List all files with details\ncd ~      # Go to home directory\ngrep text # Search for text\nfind .    # Find files'
                   }
                 }
               },
@@ -30,8 +38,51 @@ const initialFileSystem = {
                       'main.py': {
                         type: 'file',
                         content: '#!/usr/bin/env python3\nprint("Hello, Linux!")'
+                      },
+                      'README.md': {
+                        type: 'file',
+                        content: '# Game Project\n\nA simple Linux game\n\n## Requirements\n- Python 3.x\n- Terminal'
+                      },
+                      'config.json': {
+                        type: 'file',
+                        content: '{\n  "name": "LinuxGame",\n  "version": "1.0",\n  "author": "user"\n}'
                       }
                     }
+                  },
+                  'scripts': {
+                    type: 'directory',
+                    children: {
+                      'backup.sh': {
+                        type: 'file',
+                        content: '#!/bin/bash\n# Backup script\necho "Starting backup..."\ncp -r /home/user/documents /home/user/backup\necho "Backup complete!"'
+                      },
+                      'setup.sh': {
+                        type: 'file',
+                        content: '#!/bin/bash\n# Setup script\necho "Setting up environment..."\nmkdir -p ~/bin\nexport PATH=$PATH:~/bin\necho "Setup complete!"'
+                      }
+                    }
+                  }
+                }
+              },
+              'Downloads': {
+                type: 'directory',
+                children: {
+                  'data.csv': {
+                    type: 'file',
+                    content: 'id,name,score\n1,Alice,95\n2,Bob,87\n3,Charlie,92\n4,Diana,88'
+                  },
+                  'install.sh': {
+                    type: 'file',
+                    content: '#!/bin/bash\necho "Installing application..."\nsleep 2\necho "Installation complete!"'
+                  }
+                }
+              },
+              'Desktop': {
+                type: 'directory',
+                children: {
+                  'shortcuts.txt': {
+                    type: 'file',
+                    content: 'Useful Shortcuts:\nCtrl+C - Cancel command\nCtrl+D - Logout\nCtrl+L - Clear screen\nTab - Auto-complete'
                   }
                 }
               },
