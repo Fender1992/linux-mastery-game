@@ -15,44 +15,7 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
       term.write(`\x1b[1;32muser@linux\x1b[0m:\x1b[1;34m${directory}\x1b[0m$ `);
     }
   }, []);
-
-  const handleCommand = useCallback((command) => {
-    if (command.toLowerCase() === 'hint') {
-      setShowHint(true);
-      if (termRef.current) {
-        if (challenge && challenge.hint) {
-          termRef.current.writeln('\x1b[1;33m💡 Hint:\x1b[0m ' + challenge.hint);
-        } else {
-          termRef.current.writeln('No hint available for this challenge');
-        }
-        writePrompt(termRef.current, currentDirectory);
-      }
-      return;
-    }
-    
-    if (command.toLowerCase() === 'clear') {
-      if (termRef.current) {
-        termRef.current.clear();
-        displayChallenge(termRef.current);
-        writePrompt(termRef.current, currentDirectory);
-      }
-      return;
-    }
-    
-    if (onCommand) {
-      const result = onCommand(command);
-      if (result && result.output && termRef.current) {
-        termRef.current.writeln(result.output);
-      }
-      if (termRef.current) {
-        writePrompt(termRef.current, result?.newDirectory || currentDirectory);
-      }
-    } else if (termRef.current) {
-      termRef.current.writeln(`Command not recognized: ${command}`);
-      writePrompt(termRef.current, currentDirectory);
-    }
-  }, [onCommand, currentDirectory, writePrompt, challenge, displayChallenge]);
-
+  
   const clearCurrentLine = useCallback((term, currentInput) => {
     if (term && currentInput) {
       for (let i = 0; i < currentInput.length; i++) {
@@ -92,6 +55,43 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
     term.writeln('\x1b[1;33m' + '─'.repeat(60) + '\x1b[0m');
     term.writeln('');
   }, [challenge, showHint]);
+
+  const handleCommand = useCallback((command) => {
+    if (command.toLowerCase() === 'hint') {
+      setShowHint(true);
+      if (termRef.current) {
+        if (challenge && challenge.hint) {
+          termRef.current.writeln('\x1b[1;33m💡 Hint:\x1b[0m ' + challenge.hint);
+        } else {
+          termRef.current.writeln('No hint available for this challenge');
+        }
+        writePrompt(termRef.current, currentDirectory);
+      }
+      return;
+    }
+    
+    if (command.toLowerCase() === 'clear') {
+      if (termRef.current) {
+        termRef.current.clear();
+        displayChallenge(termRef.current);
+        writePrompt(termRef.current, currentDirectory);
+      }
+      return;
+    }
+    
+    if (onCommand) {
+      const result = onCommand(command);
+      if (result && result.output && termRef.current) {
+        termRef.current.writeln(result.output);
+      }
+      if (termRef.current) {
+        writePrompt(termRef.current, result?.newDirectory || currentDirectory);
+      }
+    } else if (termRef.current) {
+      termRef.current.writeln(`Command not recognized: ${command}`);
+      writePrompt(termRef.current, currentDirectory);
+    }
+  }, [onCommand, currentDirectory, writePrompt, challenge, displayChallenge]);
 
   const initializeTerminal = useCallback(() => {
     // Clear any existing timeout
@@ -227,7 +227,7 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
       setIsReady(false);
       return false;
     }
-  }, [currentDirectory, writePrompt, handleCommand, clearCurrentLine, commandHistory]);
+  }, [currentDirectory, writePrompt, handleCommand, clearCurrentLine, commandHistory, displayChallenge]);
 
   // Initialize terminal when component mounts
   useEffect(() => {
