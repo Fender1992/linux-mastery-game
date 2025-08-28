@@ -96,12 +96,14 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
     
     if (onCommand) {
       const result = onCommand(command);
+      console.log('Terminal received result:', result);
       if (result && result.output && termRef.current) {
         termRef.current.writeln(result.output);
       }
       
       // Handle incorrect answer feedback
       if (result && result.challengeResult === 'incorrect' && termRef.current) {
+        console.log('Showing incorrect message:', result.incorrectMessage);
         termRef.current.writeln('\x1b[1;31m' + (result.incorrectMessage || '❌ Incorrect answer. Try again!') + '\x1b[0m');
         
         // Refocus the terminal after showing the message

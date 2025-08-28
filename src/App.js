@@ -127,13 +127,16 @@ function App() {
 
   // Handle command execution
   const handleCommand = useCallback((command) => {
+    console.log('handleCommand called with:', command);
     const result = commandSimulator.executeCommand(command);
+    console.log('Command simulator result:', result);
     
     // Track command for stats
     gamification.playerData.stats.commandsExecuted++;
     
     // Check if command matches current challenge
     if (currentChallenge && command.trim() !== '') {
+      console.log('Current challenge:', currentChallenge.title, 'Solution:', currentChallenge.solution);
       let isCorrect = false;
       
       if (currentChallenge.validation === 'exact') {
@@ -146,8 +149,11 @@ function App() {
         isCorrect = pattern.test(command);
       }
       
+      console.log('Is correct?', isCorrect);
+      
       if (isCorrect) {
         // Challenge completed!
+        console.log('Challenge completed!');
         const newCompleted = [...completedChallenges, currentChallenge.id];
         setCompletedChallenges(newCompleted);
         storage.saveCompletedChallenges(newCompleted);
@@ -215,14 +221,18 @@ function App() {
         }
         
         // Return success result
+        console.log('Returning success result');
         return { ...result, challengeResult: 'success' };
       } else {
         // Wrong answer - provide feedback
-        return { 
+        console.log('Wrong answer! Returning incorrect result');
+        const incorrectResult = { 
           ...result, 
           challengeResult: 'incorrect',
           incorrectMessage: `❌ Incorrect answer. Hint: ${currentChallenge.hint || 'Try again!'}`
         };
+        console.log('Incorrect result object:', incorrectResult);
+        return incorrectResult;
       }
     }
     
