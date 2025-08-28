@@ -411,62 +411,44 @@ function App() {
         </div>
       )}
 
-      <div className="app-body">
-        <aside className={`sidebar ${showMenu ? 'show' : ''}`}>
-          <ProgressTracker 
-            completedChallenges={completedChallenges}
-            totalChallenges={allChallenges.length}
-          />
-          
-          {dailyQuest && (
-            <DailyQuest 
-              quest={dailyQuest}
-              onClaim={handleClaimDailyQuest}
-            />
+      <div className={`app-body ${!showMenu ? 'sidebar-collapsed' : ''}`}>
+        <aside className={`sidebar ${!showMenu ? 'collapsed' : ''}`}>
+          {showMenu && (
+            <>
+              <ProgressTracker 
+                completedChallenges={completedChallenges}
+                totalChallenges={allChallenges.length}
+              />
+              
+              {dailyQuest && (
+                <DailyQuest 
+                  quest={dailyQuest}
+                  onClaim={handleClaimDailyQuest}
+                />
+              )}
+              
+              <ChallengeList 
+                challenges={allChallenges}
+                currentChallenge={currentChallenge}
+                completedChallenges={completedChallenges}
+                onSelectChallenge={handleSelectChallenge}
+              />
+              
+              <div className="sidebar-actions">
+                <button onClick={handleReset} className="reset-btn">
+                  Reset Progress
+                </button>
+              </div>
+            </>
           )}
-          
-          <ChallengeList 
-            challenges={allChallenges}
-            currentChallenge={currentChallenge}
-            completedChallenges={completedChallenges}
-            onSelectChallenge={handleSelectChallenge}
-          />
-          
-          <div className="sidebar-actions">
-            <button onClick={handleReset} className="reset-btn">
-              Reset Progress
-            </button>
-          </div>
         </aside>
 
-        <main className="main-content">
-          <div className="challenge-section">
-            <ChallengeDetail 
-              challenge={currentChallenge}
-              onShowHint={handleShowHint}
-            />
-            
-            {currentChallenge?.story && (
-              <div className="story-panel">
-                <div className="story-setup">{currentChallenge.story.setup}</div>
-                <div className="story-character">Playing as: {currentChallenge.story.character}</div>
-                <div className="story-stakes">⚠️ {currentChallenge.story.stakes}</div>
-                {currentChallenge.technical && (
-                  <div className="story-objective">
-                    <strong>📋 Objective:</strong> {currentChallenge.technical.objective}
-                    <div className="command-example">
-                      💡 Expected format: <code>{currentChallenge.technical.solution}</code>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          
+        <main className={`main-content ${!showMenu ? 'expanded' : ''}`}>
           <div className="terminal-section">
             <TerminalEmulator 
               onCommand={handleCommand}
               currentDirectory={commandSimulator.currentDirectory}
+              challenge={currentChallenge}
             />
           </div>
         </main>

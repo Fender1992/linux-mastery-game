@@ -2,12 +2,13 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css';
 
-const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user' }) => {
+const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challenge }) => {
   const terminalRef = useRef(null);
   const termRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
   const [commandHistory, setCommandHistory] = useState([]);
   const initTimeoutRef = useRef(null);
+  const [showHint, setShowHint] = useState(false);
 
   const writePrompt = useCallback((term, directory) => {
     if (term) {
@@ -16,6 +17,28 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user' }) => {
   }, []);
 
   const handleCommand = useCallback((command) => {
+    if (command.toLowerCase() === 'hint') {
+      setShowHint(true);
+      if (termRef.current) {
+        if (challenge && challenge.hint) {
+          termRef.current.writeln('\x1b[1;33m💡 Hint:\x1b[0m ' + challenge.hint);
+        } else {
+          termRef.current.writeln('No hint available for this challenge');
+        }
+        writePrompt(termRef.current, currentDirectory);
+      }
+      return;
+    }
+    
+    if (command.toLowerCase() === 'clear') {
+      if (termRef.current) {
+        termRef.current.clear();
+        displayChallenge(termRef.current);
+        writePrompt(termRef.current, currentDirectory);
+      }
+      return;
+    }
+    
     if (onCommand) {
       const result = onCommand(command);
       if (result && result.output && termRef.current) {
@@ -28,7 +51,7 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user' }) => {
       termRef.current.writeln(`Command not recognized: ${command}`);
       writePrompt(termRef.current, currentDirectory);
     }
-  }, [onCommand, currentDirectory, writePrompt]);
+  }, [onCommand, currentDirectory, writePrompt, challenge, displayChallenge]);
 
   const clearCurrentLine = useCallback((term, currentInput) => {
     if (term && currentInput) {
@@ -37,6 +60,38 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user' }) => {
       }
     }
   }, []);
+  
+  const displayChallenge = useCallback((term) => {
+    if (!term || !challenge) return;
+    
+    term.writeln('\x1b[1;33m' + '─'.repeat(60) + '\x1b[0m');
+    term.writeln('\x1b[1;36m📋 CURRENT CHALLENGE:\x1b[0m');
+    term.writeln('\x1b[1;32m' + challenge.title + '\x1b[0m');
+    term.writeln('');
+    term.writeln('\x1b[1;37m' + challenge.description + '\x1b[0m');
+    
+    if (challenge.story) {
+      term.writeln('');
+      term.writeln('\x1b[1;33mScenario:\x1b[0m ' + challenge.story.setup);
+      term.writeln('\x1b[1;33mRole:\x1b[0m ' + challenge.story.character);
+      term.writeln('\x1b[1;31mStakes:\x1b[0m ' + challenge.story.stakes);
+    }
+    
+    if (challenge.technical) {
+      term.writeln('');
+      term.writeln('\x1b[1;36mObjective:\x1b[0m ' + challenge.technical.objective);
+    }
+    
+    term.writeln('');
+    if (!showHint) {
+      term.writeln('\x1b[1;90mType "hint" to see a hint\x1b[0m');
+    } else if (challenge.hint) {
+      term.writeln('\x1b[1;33m💡 Hint:\x1b[0m ' + challenge.hint);
+    }
+    
+    term.writeln('\x1b[1;33m' + '─'.repeat(60) + '\x1b[0m');
+    term.writeln('');
+  }, [challenge, showHint]);
 
   const initializeTerminal = useCallback(() => {
     // Clear any existing timeout
@@ -102,6 +157,10 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user' }) => {
       term.writeln('\x1b[1;32m🐧 Linux Mastery Game Terminal\x1b[0m');
       term.writeln('Type "help" to see available commands');
       term.writeln('');
+      
+      // Display current challenge if exists
+      displayChallenge(term);
+      
       writePrompt(term, currentDirectory);
 
       // Set up input handling
@@ -197,6 +256,18 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user' }) => {
       }
     };
   }, [initializeTerminal]);
+
+  // Handle challenge changes
+  useEffect(() => {
+    if (termRef.current && challenge) {
+      setShowHint(false);  // Reset hint when challenge changes
+      termRef.current.clear();
+      termRef.current.writeln('\x1b[1;32m🐧 New Challenge Loaded!\x1b[0m');
+      termRef.current.writeln('');
+      displayChallenge(termRef.current);
+      writePrompt(termRef.current, currentDirectory);
+    }
+  }, [challenge, displayChallenge, writePrompt, currentDirectory]);
 
   // Handle window resize
   useEffect(() => {
