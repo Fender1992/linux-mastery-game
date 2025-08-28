@@ -177,8 +177,13 @@ body {
   position: relative;
 }
 
-.app-body.sidebar-collapsed {
-  /* Ensure proper layout when sidebar is collapsed */
+.app-body.sidebar-collapsed .sidebar {
+  display: none;
+}
+
+.app-body.sidebar-collapsed .main-content {
+  margin-left: 0;
+  width: 100%;
 }
 
 /* Sidebar Styles */
@@ -194,10 +199,7 @@ body {
 }
 
 .sidebar.collapsed {
-  width: 0;
-  overflow: hidden;
-  border-right: none;
-  padding: 0;
+  display: none;
 }
 
 .challenge-list {
@@ -294,6 +296,7 @@ body {
   padding: 0.5rem;
   transition: all 0.3s ease;
   min-width: 0;
+  width: calc(100% - 250px);
 }
 
 .main-content.expanded {
@@ -369,6 +372,8 @@ body {
   border-radius: 4px;
   padding: 0.5rem;
   min-height: 0;
+  min-width: 0;
+  width: 100%;
   overflow: hidden;
 }
 
