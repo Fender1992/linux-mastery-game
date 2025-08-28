@@ -213,6 +213,16 @@ function App() {
           setCurrentChallenge(nextChallenge);
           storage.saveCurrentChallenge(nextChallenge.id);
         }
+        
+        // Return success result
+        return { ...result, challengeResult: 'success' };
+      } else if (command.trim() !== '') {
+        // Wrong answer - provide feedback
+        return { 
+          ...result, 
+          challengeResult: 'incorrect',
+          incorrectMessage: `❌ Incorrect answer. Expected: ${currentChallenge.hint || 'Try again!'}`
+        };
       }
     }
     

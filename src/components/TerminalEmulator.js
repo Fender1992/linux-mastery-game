@@ -10,6 +10,7 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
   const initTimeoutRef = useRef(null);
   const [showHint, setShowHint] = useState(false);
   const commandSimulatorRef = useRef(null);
+  const focusTimeoutRef = useRef(null);
 
   const themes = {
     matrix: { bg: '#0a0a0a', fg: '#00ff00', cursor: '#00ff00' },
@@ -98,6 +99,22 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
       if (result && result.output && termRef.current) {
         termRef.current.writeln(result.output);
       }
+      
+      // Handle incorrect answer feedback
+      if (result && result.challengeResult === 'incorrect' && termRef.current) {
+        termRef.current.writeln('\x1b[1;31m' + (result.incorrectMessage || '❌ Incorrect answer. Try again!') + '\x1b[0m');
+        
+        // Refocus the terminal after showing the message
+        if (focusTimeoutRef.current) clearTimeout(focusTimeoutRef.current);
+        focusTimeoutRef.current = setTimeout(() => {
+          if (termRef.current) {
+            termRef.current.focus();
+          }
+        }, 100);
+      } else if (result && result.challengeResult === 'success' && termRef.current) {
+        termRef.current.writeln('\x1b[1;32m✅ Correct! Well done!\x1b[0m');
+      }
+      
       if (termRef.current) {
         writePrompt(termRef.current, result?.newDirectory || currentDirectory);
       }
@@ -160,6 +177,9 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
 
       // Open terminal first
       term.open(terminalRef.current);
+      
+      // Focus the terminal
+      term.focus();
 
       // Store reference
       termRef.current = term;
@@ -294,6 +314,9 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
     return () => {
       if (initTimeoutRef.current) {
         clearTimeout(initTimeoutRef.current);
+      }
+      if (focusTimeoutRef.current) {
+        clearTimeout(focusTimeoutRef.current);
       }
       if (termRef.current) {
         termRef.current.dispose();
