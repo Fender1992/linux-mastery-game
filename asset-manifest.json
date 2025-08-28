@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/linux-mastery-game/static/css/main.dd34ef43.css",
+    "main.css": "/linux-mastery-game/static/css/main.b24f4a12.css",
     "main.js": "/linux-mastery-game/static/js/main.606b50eb.js",
     "static/js/453.bd5b9ad0.chunk.js": "/linux-mastery-game/static/js/453.bd5b9ad0.chunk.js",
     "service-worker.js": "/linux-mastery-game/service-worker.js",
     "index.html": "/linux-mastery-game/index.html",
-    "main.dd34ef43.css.map": "/linux-mastery-game/static/css/main.dd34ef43.css.map",
+    "main.b24f4a12.css.map": "/linux-mastery-game/static/css/main.b24f4a12.css.map",
     "main.606b50eb.js.map": "/linux-mastery-game/static/js/main.606b50eb.js.map",
     "453.bd5b9ad0.chunk.js.map": "/linux-mastery-game/static/js/453.bd5b9ad0.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.dd34ef43.css",
+    "static/css/main.b24f4a12.css",
     "static/js/main.606b50eb.js"
   ]
 }
