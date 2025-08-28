@@ -2,13 +2,27 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css';
 
-const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challenge }) => {
+const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challenge, theme = 'matrix', fontSize = 14 }) => {
   const terminalRef = useRef(null);
   const termRef = useRef(null);
   const [isReady, setIsReady] = useState(false);
   const [commandHistory, setCommandHistory] = useState([]);
   const initTimeoutRef = useRef(null);
   const [showHint, setShowHint] = useState(false);
+  const commandSimulatorRef = useRef(null);
+
+  const themes = {
+    matrix: { bg: '#0a0a0a', fg: '#00ff00', cursor: '#00ff00' },
+    dracula: { bg: '#282a36', fg: '#f8f8f2', cursor: '#ff79c6' },
+    monokai: { bg: '#272822', fg: '#f8f8f2', cursor: '#f92672' },
+    solarized: { bg: '#002b36', fg: '#839496', cursor: '#268bd2' },
+    ocean: { bg: '#001220', fg: '#00ccff', cursor: '#00ccff' },
+    amber: { bg: '#1a1100', fg: '#ffb000', cursor: '#ffb000' },
+    cyberpunk: { bg: '#0d0208', fg: '#ff006e', cursor: '#8338ec' },
+    retro: { bg: '#000000', fg: '#33ff00', cursor: '#33ff00' }
+  };
+
+  const currentTheme = themes[theme] || themes.matrix;
 
   const writePrompt = useCallback((term, directory) => {
     if (term) {
@@ -130,13 +144,13 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
       // Create new terminal with calculated dimensions
       const term = new Terminal({
         cursorBlink: true,
-        fontSize: 14,
+        fontSize: fontSize,
         fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
         theme: {
-          background: '#0a0a0a',
-          foreground: '#00ff00',
-          cursor: '#00ff00',
-          selection: 'rgba(0, 255, 0, 0.3)'
+          background: currentTheme.bg,
+          foreground: currentTheme.fg,
+          cursor: currentTheme.cursor,
+          selection: `${currentTheme.cursor}33`
         },
         cols: cols,
         rows: rows,
@@ -206,6 +220,37 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
             }
             term.write(inputBuffer);
           }
+        } else if (code === 9) { // Tab key for autocomplete
+          const parts = inputBuffer.split(' ');
+          const lastPart = parts[parts.length - 1];
+          
+          // Get available commands
+          const availableCommands = [
+            'ls', 'cd', 'pwd', 'cat', 'echo', 'grep', 'find', 'mkdir', 'touch', 
+            'rm', 'cp', 'mv', 'head', 'tail', 'wc', 'chmod', 'ps', 'sort', 
+            'uniq', 'df', 'du', 'which', 'whoami', 'date', 'clear', 'help', 
+            'man', 'history', 'env', 'export', 'hint'
+          ];
+          
+          // If it's the first word, autocomplete commands
+          if (parts.length === 1 && lastPart.length > 0) {
+            const matches = availableCommands.filter(cmd => cmd.startsWith(lastPart));
+            
+            if (matches.length === 1) {
+              // Complete the command
+              const completion = matches[0].slice(lastPart.length);
+              inputBuffer += completion;
+              term.write(completion);
+            } else if (matches.length > 1) {
+              // Show options
+              term.write('\r\n');
+              term.write(matches.join('  '));
+              term.write('\r\n');
+              writePrompt(term, currentDirectory);
+              term.write(inputBuffer);
+            }
+          }
+          // TODO: Add file/directory autocomplete for arguments
         } else if (code === 3) { // Ctrl+C
           term.write('^C\r\n');
           writePrompt(term, currentDirectory);
@@ -227,9 +272,9 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
       setIsReady(false);
       return false;
     }
-  }, [currentDirectory, writePrompt, handleCommand, clearCurrentLine, commandHistory, displayChallenge]);
+  }, [currentDirectory, writePrompt, handleCommand, clearCurrentLine, commandHistory, displayChallenge, currentTheme, fontSize]);
 
-  // Initialize terminal when component mounts
+  // Initialize terminal when component mounts or theme/fontSize changes
   useEffect(() => {
     const attemptInit = () => {
       if (!initializeTerminal()) {
@@ -255,7 +300,7 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
         termRef.current = null;
       }
     };
-  }, [initializeTerminal]);
+  }, [initializeTerminal, theme, fontSize]);
 
   // Handle challenge changes
   useEffect(() => {
@@ -304,7 +349,7 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
       style={{ 
         width: '100%', 
         height: '100%',
-        backgroundColor: '#0a0a0a',
+        backgroundColor: currentTheme.bg,
         padding: '10px',
         borderRadius: '8px',
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
@@ -319,8 +364,8 @@ const TerminalEmulator = ({ onCommand, currentDirectory = '/home/user', challeng
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          color: '#00ff00',
-          fontSize: '14px'
+          color: currentTheme.fg,
+          fontSize: `${fontSize}px`
         }}>
           Initializing terminal...
         </div>

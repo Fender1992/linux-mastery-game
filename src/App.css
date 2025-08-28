@@ -1712,3 +1712,218 @@ body {
   background: none;
   padding: 0;
 }
+
+/* Settings Modal Styles */
+.settings-modal {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-container {
+  background: #1a1a1a;
+  border: 2px solid #00ff00;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem;
+  position: relative;
+}
+
+.settings-container h2 {
+  color: #00ff00;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.settings-container h3 {
+  color: #00ff00;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.5rem;
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+}
+
+.setting-group {
+  margin-bottom: 1.5rem;
+}
+
+.setting-group label {
+  display: block;
+  color: #aaa;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.theme-option {
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+}
+
+.theme-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-option.active {
+  border-width: 2px;
+}
+
+.theme-preview {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.theme-name {
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  opacity: 0.9;
+}
+
+.font-size-control {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+.font-size-control button {
+  background: #0a0a0a;
+  border: 1px solid #333;
+  color: #00ff00;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+}
+
+.font-size-control button:hover {
+  border-color: #00ff00;
+  background: rgba(0, 255, 0, 0.1);
+}
+
+.font-size-value {
+  color: #fff;
+  font-size: 1rem;
+  min-width: 60px;
+  text-align: center;
+}
+
+.font-preview {
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  font-family: 'Monaco', 'Courier New', monospace;
+  color: #00ff00;
+}
+
+.export-btn, .import-btn {
+  background: linear-gradient(135deg, #00ff00 0%, #00aa00 100%);
+  color: #0a0a0a;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.export-btn:hover, .import-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 255, 0, 0.4);
+}
+
+.import-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.import-textarea {
+  width: 100%;
+  min-height: 100px;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.85rem;
+  resize: vertical;
+  margin: 0.5rem 0;
+}
+
+.import-textarea:focus {
+  outline: none;
+  border-color: #00ff00;
+}
+
+.setting-hint {
+  color: #888;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.shortcuts-list {
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #222;
+}
+
+.shortcut-item:last-child {
+  border-bottom: none;
+}
+
+.shortcut-item kbd {
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #00ff00;
+  min-width: 80px;
+  text-align: center;
+}
+
+.shortcut-item span {
+  color: #aaa;
+  font-size: 0.9rem;
+}

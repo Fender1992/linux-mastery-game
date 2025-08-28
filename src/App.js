@@ -8,6 +8,7 @@ import Leaderboard from './components/Leaderboard';
 import DailyQuest from './components/DailyQuest';
 import ProgressTracker from './components/ProgressTracker';
 import SandboxMode from './components/SandboxMode';
+import Settings from './components/Settings';
 import CommandSimulator from './utils/commandSimulator';
 import storage from './utils/storage';
 import gamification from './utils/gamification';
@@ -40,6 +41,11 @@ function App() {
   const [dailyQuest, setDailyQuest] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [xpAnimation, setXpAnimation] = useState(null);
+  
+  // Theme and settings
+  const [showSettings, setShowSettings] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem('terminal-theme') || 'matrix');
+  const [fontSize, setFontSize] = useState(parseInt(localStorage.getItem('terminal-font-size')) || 14);
 
   // Load challenges and saved progress on mount
   useEffect(() => {
@@ -301,6 +307,84 @@ function App() {
     }
   };
 
+  // Handle theme change
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme);
+    localStorage.setItem('terminal-theme', newTheme);
+  };
+
+  // Handle font size change
+  const handleFontSizeChange = (newSize) => {
+    setFontSize(newSize);
+    localStorage.setItem('terminal-font-size', newSize.toString());
+  };
+
+  // Handle export progress
+  const handleExportProgress = () => {
+    const data = {
+      version: '1.0',
+      date: new Date().toISOString(),
+      completedChallenges,
+      currentChallenge: currentChallenge?.id,
+      playerData: gamification.playerData,
+      difficulty,
+      theme,
+      fontSize
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `linux-mastery-progress-${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // Handle import progress
+  const handleImportProgress = (data) => {
+    try {
+      if (data.completedChallenges) {
+        setCompletedChallenges(data.completedChallenges);
+        storage.saveCompletedChallenges(data.completedChallenges);
+      }
+      
+      if (data.currentChallenge) {
+        const challenge = [...challenges, ...narrativeChallenges].find(c => c.id === data.currentChallenge);
+        if (challenge) {
+          setCurrentChallenge(challenge);
+          storage.saveCurrentChallenge(challenge.id);
+        }
+      }
+      
+      if (data.playerData) {
+        Object.assign(gamification.playerData, data.playerData);
+        setPlayerData({...gamification.playerData});
+      }
+      
+      if (data.difficulty) {
+        handleDifficultyChange(data.difficulty);
+      }
+      
+      if (data.theme) {
+        handleThemeChange(data.theme);
+      }
+      
+      if (data.fontSize) {
+        handleFontSizeChange(data.fontSize);
+      }
+      
+      setSuccessMessage('Progress imported successfully!');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (error) {
+      console.error('Import failed:', error);
+      setSuccessMessage('Failed to import progress');
+      setTimeout(() => setSuccessMessage(''), 3000);
+    }
+  };
+
   // Reset progress
   const handleReset = () => {
     if (window.confirm('Are you sure you want to reset all progress?')) {
@@ -378,6 +462,7 @@ function App() {
         <div className="nav-right">
           <span className="status-text">Lv.{playerData.level} | {playerData.xp}XP</span>
           <button className="nav-icon" onClick={() => setShowSandbox(true)} title="Sandbox">🧪</button>
+          <button className="nav-icon" onClick={() => setShowSettings(true)} title="Settings">⚙️</button>
           <button className="nav-icon" onClick={() => setShowProfile(true)} title="Profile">👤</button>
           <button className="nav-icon" onClick={() => setShowLeaderboard(true)} title="Leaderboard">🏆</button>
         </div>
@@ -449,6 +534,8 @@ function App() {
               onCommand={handleCommand}
               currentDirectory={commandSimulator.currentDirectory}
               challenge={currentChallenge}
+              theme={theme}
+              fontSize={fontSize}
             />
           </div>
         </main>
@@ -477,6 +564,20 @@ function App() {
         <div className="modal-overlay">
           <SandboxMode 
             onClose={() => setShowSandbox(false)}
+          />
+        </div>
+      )}
+
+      {showSettings && (
+        <div className="modal-overlay">
+          <Settings 
+            currentTheme={theme}
+            currentFontSize={fontSize}
+            onThemeChange={handleThemeChange}
+            onFontSizeChange={handleFontSizeChange}
+            onClose={() => setShowSettings(false)}
+            onExport={handleExportProgress}
+            onImport={handleImportProgress}
           />
         </div>
       )}
