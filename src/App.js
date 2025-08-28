@@ -133,7 +133,7 @@ function App() {
     gamification.playerData.stats.commandsExecuted++;
     
     // Check if command matches current challenge
-    if (currentChallenge) {
+    if (currentChallenge && command.trim() !== '') {
       let isCorrect = false;
       
       if (currentChallenge.validation === 'exact') {
@@ -216,12 +216,12 @@ function App() {
         
         // Return success result
         return { ...result, challengeResult: 'success' };
-      } else if (command.trim() !== '') {
+      } else {
         // Wrong answer - provide feedback
         return { 
           ...result, 
           challengeResult: 'incorrect',
-          incorrectMessage: `❌ Incorrect answer. Expected: ${currentChallenge.hint || 'Try again!'}`
+          incorrectMessage: `❌ Incorrect answer. Hint: ${currentChallenge.hint || 'Try again!'}`
         };
       }
     }
